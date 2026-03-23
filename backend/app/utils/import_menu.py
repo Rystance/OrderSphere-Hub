@@ -1,50 +1,65 @@
 import json
 from pathlib import Path
 from sqlalchemy.orm import Session
-from ..database import SessionLocal, Base, engine
 from ..models import MenuItem
+from ..database import SessionLocal
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_PATH = BASE_DIR / "data" / "foodMsg.json"
+DATA_FILE = BASE_DIR / "data" / "foodMsg.json"
+IMAGE_DIR = BASE_DIR / "data" / "images"
 
 
-def init_db():
-    Base.metadata.create_all(bind=engine)
+def normalize(value):
+    """把 list 转成字符串，把 None 转成空字符串"""
+    if isinstance(value, list):
+        return "、".join(value)  # 用顿号连接更符合中文
+    if value is None:
+        return ""
+    return str(value)
 
 
-def import_menu_from_json(db: Session, json_path: Path = DATA_PATH):
-    with open(json_path, "r", encoding="utf-8") as f:
+def import_menu_from_json(db: Session):
+    if not DATA_FILE.exists():
+        print("❌ foodMsg.json 文件不存在")
+        return
+
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     for raw_key, item in data.items():
-        # 避免重复导入
         exists = db.query(MenuItem).filter(MenuItem.raw_key == raw_key).first()
         if exists:
             continue
 
-        price = float(item.get("price", 0))
-        category = ",".join(item.get("category", [])) if isinstance(item.get("category"), list) else item.get("category")
-        type_ = ",".join(item.get("type", [])) if isinstance(item.get("type"), list) else item.get("type")
+        name = normalize(item.get("name", raw_key))
+        price = int(item.get("price", 0))
+        category = normalize(item.get("category"))
+        type_ = normalize(item.get("type"))
+        description = normalize(item.get("description"))
+        region = normalize(item.get("region"))
+
+        # 图片路径
+        image_path = IMAGE_DIR / f"{raw_key}.png"
+        image_url = f"/images/{raw_key}.png" if image_path.exists() else None
 
         menu_item = MenuItem(
             raw_key=raw_key,
-            name=raw_key,  # 直接使用 JSON 键名作为展示名称
+            name=name,
             price=price,
             category=category,
             type=type_,
-            description=item.get("description", ""),
-            region=item.get("region", ""),
+            description=description,
+            region=region,
+            image_url=image_url
         )
+
         db.add(menu_item)
 
     db.commit()
+    print("✔ 菜单导入完成")
 
 
 if __name__ == "__main__":
-    init_db()
     db = SessionLocal()
-    try:
-        import_menu_from_json(db)
-        print("Menu imported successfully.")
-    finally:
-        db.close()
+    import_menu_from_json(db)
+    db.close()

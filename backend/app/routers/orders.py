@@ -1,26 +1,37 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-from .. import schemas, crud
+from .. import models, schemas
 from ..deps import get_db
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 
-@router.post("/", response_model=schemas.OrderRead)
-def create_order(order_in: schemas.OrderCreate, db: Session = Depends(get_db)):
-    order = crud.create_order(db, order_in)
-    return order
+# 创建订单
+@router.post("/", response_model=schemas.Order)
+def create_order(order: schemas.OrderCreate, db: Session = Depends(get_db)):
+    new_order = models.Order(
+        customer_name=order.customer_name,
+    )
+    db.add(new_order)
+    db.commit()
+    db.refresh(new_order)
+
+    # 添加订单项
+    for item in order.items:
+        db_item = models.OrderItem(
+            order_id=new_order.id,
+            menu_item_id=item.menu_item_id,
+            quantity=item.quantity
+        )
+        db.add(db_item)
+
+    db.commit()
+    db.refresh(new_order)
+    return new_order
 
 
-@router.get("/{order_id}", response_model=schemas.OrderRead)
-def get_order(order_id: int, db: Session = Depends(get_db)):
-    order = crud.get_order(db, order_id)
-    if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
-    return order
-
-
-@router.get("/", response_model=List[schemas.OrderRead])
-def list_orders(db: Session = Depends(get_db)):
-    return crud.list_orders(db)
+# 获取所有订单
+@router.get("/", response_model=List[schemas.Order])
+def get_orders(db: Session = Depends(get_db)):
+    return db.query(models.Order).all()

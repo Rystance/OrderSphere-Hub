@@ -2,7 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .database import Base, engine
-from .routers import menu, orders, health
+from .routers import menu, orders, health, auth, admin_menu, admin_orders, admin_users
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+IMAGE_DIR = BASE_DIR / "data" / "images"
 
 Base.metadata.create_all(bind=engine)
 
@@ -19,3 +24,9 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(menu.router)
 app.include_router(orders.router)
+app.include_router(auth.router)
+app.include_router(admin_menu.router)
+app.include_router(admin_orders.router)
+app.include_router(admin_users.router)
+
+app.mount("/images", StaticFiles(directory=IMAGE_DIR), name="images")

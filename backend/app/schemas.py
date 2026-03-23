@@ -1,54 +1,85 @@
-from pydantic import BaseModel
-from typing import Optional, List
+from pydantic import BaseModel, field_validator
+from typing import List, Optional
 
 
+# -------------------------
+# 用户相关
+# -------------------------
+class UserBase(BaseModel):
+    username: str
+
+
+class UserCreate(UserBase):
+    password: str
+    confirm_password: str
+
+    @field_validator("confirm_password")
+    def passwords_match(cls, v, values):
+        if "password" in values and v != values["password"]:
+            raise ValueError("两次输入的密码不一致")
+        return v
+
+
+class UserLogin(UserBase):
+    password: str
+
+
+class User(BaseModel):
+    id: int
+    username: str
+    is_admin: bool
+
+    class Config:
+        from_attributes = True
+
+
+# -------------------------
+# 菜单相关
+# -------------------------
 class MenuItemBase(BaseModel):
     name: str
-    price: float
+    price: int
     category: Optional[str] = None
     type: Optional[str] = None
     description: Optional[str] = None
     region: Optional[str] = None
+    raw_key: Optional[str] = None
+    image_url: Optional[str] = None
 
 
-class MenuItemCreate(MenuItemBase):
-    raw_key: str
-
-
-class MenuItemRead(MenuItemBase):
+class MenuItem(MenuItemBase):
     id: int
-    raw_key: str
 
     class Config:
         from_attributes = True
 
 
+# -------------------------
+# 订单相关
+# -------------------------
 class OrderItemCreate(BaseModel):
     menu_item_id: int
-    quantity: int = 1
+    quantity: int
 
 
 class OrderCreate(BaseModel):
-    customer_name: Optional[str] = None
+    customer_name: str
     items: List[OrderItemCreate]
 
 
-class OrderItemRead(BaseModel):
+class OrderItem(BaseModel):
     id: int
     menu_item_id: int
     quantity: int
-    menu_item: MenuItemRead
 
     class Config:
         from_attributes = True
 
 
-class OrderRead(BaseModel):
+class Order(BaseModel):
     id: int
-    customer_name: Optional[str]
-    status: str
-    total_price: float
-    items: List[OrderItemRead]
+    customer_name: str
+    items: List[OrderItem]
 
     class Config:
         from_attributes = True
