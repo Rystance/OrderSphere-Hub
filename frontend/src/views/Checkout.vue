@@ -83,10 +83,23 @@ import { useCartStore } from '../store/cart'
 const cart = useCartStore()
 
 const submitOrder = async () => {
-  if (cart.items.length === 0) return alert('购物车为空')
+  if (cart.items.length === 0) {
+    alert('购物车为空')
+    return
+  }
 
+  const username = localStorage.getItem('username')
+  const token = localStorage.getItem('token')
+
+  // ⭐ 未登录：只提示，不跳转
+  if (!username || !token) {
+    alert('请先登录后再提交订单')
+    return
+  }
+
+  // ⭐ 已登录 → 正常提交
   const payload = {
-    customer_name: localStorage.getItem('username') || '匿名用户',
+    customer_name: username,
     items: cart.items.map(i => ({
       menu_item_id: i.id,
       quantity: i.quantity
@@ -95,7 +108,7 @@ const submitOrder = async () => {
 
   const res = await fetch('http://127.0.0.1:8000/orders', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   })
 
