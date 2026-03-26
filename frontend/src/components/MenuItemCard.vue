@@ -12,7 +12,7 @@
     </div>
 
     <!-- 原卡片内容（flex 容器） -->
-    <div class="flex items-center bg-white rounded shadow p-3 space-x-4">
+    <div class="flex items-center bg-white dark:bg-gray-800 rounded shadow p-3 space-x-4">
 
       <!-- 左侧小图片 -->
       <img
@@ -38,9 +38,9 @@
         </div>
 
         <div class="flex items-center space-x-3 mt-2">
-          <button @click="decrease" class="px-2 bg-gray-300 rounded">-</button>
+          <button @click="decrease" class="px-2 bg-gray-300 dark:bg-gray-600 rounded">-</button>
           <span class="font-semibold">{{ quantity }}</span>
-          <button @click="increase" class="px-2 bg-gray-300 rounded">+</button>
+          <button @click="increase" class="px-2 bg-gray-300 dark:bg-gray-600 rounded">+</button>
         </div>
 
         <button

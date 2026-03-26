@@ -1,77 +1,75 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-    <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded shadow p-6">
-      <h2 class="text-2xl font-bold mb-4 text-center">注册</h2>
+  <div class="max-w-md mx-auto mt-10 bg-white dark:bg-gray-800 p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4 text-center">注册</h2>
 
-      <form @submit.prevent="onSubmit" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium mb-1">用户名</label>
-          <input
-            v-model="form.username"
-            type="text"
-            class="input"
-            required
-          />
-        </div>
+    <form @submit.prevent="onSubmit" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">用户名</label>
+        <input
+          v-model="form.username"
+          type="text"
+          class="input"
+          required
+        />
+      </div>
 
-        <div>
-          <label class="block text-sm font-medium mb-1">密码</label>
-          <input
-            v-model="form.password"
-            type="password"
-            class="input"
-            required
-            aria-describedby="password-strength"
-          />
+      <div>
+        <label class="block text-sm font-medium mb-1">密码</label>
+        <input
+          v-model="form.password"
+          type="password"
+          class="input"
+          required
+          aria-describedby="password-strength"
+        />
 
-          <!-- 密码复杂度进度条 -->
-          <div class="mt-2">
-            <div class="w-full bg-gray-200 h-2 rounded overflow-hidden">
-              <div
-                :style="{ width: passwordStrength.width }"
-                :class="passwordStrength.colorClass"
-                class="h-2 transition-all"
-                role="progressbar"
-                :aria-valuenow="passwordStrength.score"
-                aria-valuemin="0"
-                aria-valuemax="3"
-              ></div>
-            </div>
-            <p id="password-strength" class="text-xs mt-1" :class="passwordStrength.textClass">
-              {{ passwordStrength.text }}
-            </p>
-            <p v-if="isPasswordTooShort" class="text-xs mt-1 text-red-600">密码至少为6位</p>
+        <!-- 密码复杂度进度条 -->
+        <div class="mt-2">
+          <div class="w-full bg-gray-200 h-2 rounded overflow-hidden">
+            <div
+              :style="{ width: passwordStrength.width }"
+              :class="passwordStrength.colorClass"
+              class="h-2 transition-all"
+              role="progressbar"
+              :aria-valuenow="passwordStrength.score"
+              aria-valuemin="0"
+              aria-valuemax="3"
+            ></div>
           </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1">确认密码</label>
-          <input
-            v-model="form.confirm_password"
-            type="password"
-            class="input"
-            required
-          />
-          <p v-if="passwordMismatch" class="text-red-500 text-xs mt-1">
-            两次输入的密码不一致
+          <p id="password-strength" class="text-xs mt-1" :class="passwordStrength.textClass">
+            {{ passwordStrength.text }}
           </p>
+          <p v-if="isPasswordTooShort" class="text-xs mt-1 text-red-600">密码至少为6位</p>
         </div>
+      </div>
 
-        <div class="flex items-center justify-between">
-          <button
-            type="submit"
-            class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-          >
-            注册
-          </button>
-        </div>
-
-        <p class="text-center text-sm mt-3">
-          已有账号？
-          <router-link to="/login" class="text-blue-600 hover:underline">去登录</router-link>
+      <div>
+        <label class="block text-sm font-medium mb-1">确认密码</label>
+        <input
+          v-model="form.confirm_password"
+          type="password"
+          class="input"
+          required
+        />
+        <p v-if="passwordMismatch" class="text-red-500 text-xs mt-1">
+          两次输入的密码不一致
         </p>
-      </form>
-    </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        >
+          注册
+        </button>
+      </div>
+
+      <p class="text-center text-sm mt-3">
+        已有账号？
+        <router-link to="/login" class="text-blue-600 hover:underline">去登录</router-link>
+      </p>
+    </form>
   </div>
 </template>
 
@@ -104,7 +102,7 @@ function calcPasswordScore(pw) {
 const passwordStrength = computed(() => {
   const pw = form.password
 
-  // ⭐ 密码为空 → 返回“空状态”
+  // 密码为空则返回“空状态”
   if (!pw) {
     return {
       width: '0%',
