@@ -212,7 +212,7 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
 
 # 文档格式约定
 
-用户文档为 [USER_GUIDE](https://github.com/Hijiwos/OrderSphere-Hub/USER_GUIDE.md) ，请确保不要新建其他的markdown文件
+用户文档为 [USER_GUIDE](https://github.com/Hijiwos/OrderSphere-Hub/blob/main/USER_GUIDE.md) ，请确保不要新建其他的markdown文件
 
 推荐使用 [Visual Studio Code](https://code.visualstudio.com/Download) 作为本文档的编辑器，并安装 `.vscode/extensions.json` 中推荐的拓展以获得最佳编辑体验。
 
