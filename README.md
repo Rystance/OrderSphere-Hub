@@ -169,14 +169,7 @@ npm run build
 frontend/dist/
 ```
 
-## 2. 后端挂载静态文件（已在 main.py 中配置）
-
-```python
-from fastapi.staticfiles import StaticFiles
-app.mount("/", StaticFiles(directory=FRONTEND_DIST, html=True), name="frontend")
-```
-
-## 3. 启动后端即可访问前端
+## 2. 启动后端即可访问前端
 
 ```bash
 uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -214,3 +207,112 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
 # 📄 许可证
 
 无
+
+---
+
+# 文档格式约定
+
+用户文档为 [USER_GUIDE](https://github.com/Hijiwos/OrderSphere-Hub/USER_GUIDE.md) ，请确保不要新建其他的markdown文件
+
+推荐使用 [Visual Studio Code](https://code.visualstudio.com/Download) 作为本文档的编辑器，并安装 `.vscode/extensions.json` 中推荐的拓展以获得最佳编辑体验。
+
+## 标题格式 {#heading}
+
+- 每个标题均由简短的几个字组成，向用户说明下一节内容的大致格式
+- 除首个大标题外，所有标题均应在末尾带有一个空格分隔的 `{#<ID>}` 来指定一个合理的 URL slug
+- URL slug 应由若干翻译准确、能清晰体现标题内容的英文单词组成，中间用 `-` 隔开。若标题本身由英文组成，请提供一个全小写、由 `-` 替换下划线的 slug
+
+## 用语约定 {#term}
+
+| 对象                   | 用语                                                          |
+|----------------------|-------------------------------------------------------------|
+| 文档阅读者                | `您`                                                         |
+| 本平台                  | `SakuraFrp`                                                 |
+| 计算机知识丰富的 Geek / 专业用户 | `高级用户`                                                      |
+| 用于演示的用户名称            | `ExampleUser1`、`ExampleUser2`、`SampleUser1`、`SampleUser2` 等 |
+| 用于演示的料理 ID 和名称       | `#233 一个神奇的料理`、`#5 Demo Node`                               |
+
+如果您发明了一个新名词，请注意在不同地方使用时保持其一致性。
+
+## 符号约定 {#symbol}
+
+- 用 `空格` 而不是 `Tab` 进行缩进，缩进请交给 markdownlint 处理
+- 用 `\n` 进行换行，文件内通常不应出现 `\r`
+- 空行不能包含空白字符，应该为单纯的 `\n\n`，请交给 markdownlint 处理
+- 在没有特殊说明的地方均使用半角符号，如: `:`，`.`，`<`，`>`，`(`，`)`。通常这些符号后面需要加上一个空格来确保间距合理
+- 在文字段落中均采用 `，` 逗号，每句话结尾需添加 `。` 句号，段末通常以 `。` 或 `:` 结尾
+- 列表条目、`tip`/`warning`/`danger` 等提示容器中的文本通常不以 `。` 结尾
+
+## 文件结构 {#filesystem}
+
+- 将所有图片放置于和 Markdown 文件位于同一级的 `_images` 文件夹中
+- 将所有视频放置于根目录 `_videos` 文件夹中，并使用 `![](@source/_videos/foo-bar.mp4)` 的引用形式
+
+## 设计元素 {#design-elements}
+
+本文档支持引入图片，采用 `![](./_photos/example.png)` 的形式。
+
+
+## 文本间距 {#spacing}
+
+在正常文本和半角标点之间应添加空格，半角标点和全角标点之间无需空格:
+
+```markdown
+文本文本 `修饰块` 文本文本 **修饰块** 文本
+       ^ 空格   ^ 空格   ^ 空格     ^ 空格
+
+文本文本 `修饰块`，文本文本 (文本文本) 文本
+       ^ 空格            ^ 空格     ^ 空格
+
+文本文本。`修饰块`、文本文本
+         ^ 半角、全角标点之间无需空格
+```
+
+## 文本修饰 {#markup}
+
+**markdownlint 被配置为不自动修复粗体或斜体的修饰字符，请注意遵守下方规则**
+
+使用 `*` 添加粗体、斜体效果:
+
+```markdown
+*斜体*
+
+**粗体**
+
+***粗斜体***
+```
+
+如果需要添加一条 `*` 开头的斜体提示，可以使用 `_` 包裹 `*`：
+
+```markdown
+_* 这是一条温馨提示_
+```
+
+## 链接格式 {#links}
+
+- 在链接到文档内部元素时，请使用 `/` 开头的绝对路径链接，并确保链接中包含了文件扩展名 `.md`  
+  例：`![prprrpr](/pa47.md)`
+- 在链接到外部站点时，请清理链接中不必要的追踪参数  
+  正确示例：`![这是好的](https://www.bilibili.com/video/BV1va411w7aM/)`  
+  错误示例：`![这很不好](https://www.bilibili.com/video/BV1va411w7aM/?share_source=xxx&yyy=zzz)`
+
+## 无序列表 {#unordered-list}
+
+使用 `-` 作为列表标记，标记后添加一个空格:
+
+```markdown
+- ItemA
+- ItemB
+```
+
+## 有序列表 {#ordered-list}
+
+使用 `1.` 作为列表标记，也可以按个人喜好用 `1.`、`2.`、`3.` 等进行标记，只要保持整个文件一致即可。
+
+标记后添加一个空格与内容分开:
+
+```markdown
+1. ItemA
+1. ItemB
+1. ItemC
+```
