@@ -79,8 +79,10 @@
 
 <script setup>
 import { useCartStore } from '../store/cart'
+import {useUserStore} from '../store/user'
 
 const cart = useCartStore()
+const user = useUserStore()
 
 const submitOrder = async () => {
   if (cart.items.length === 0) {
@@ -88,7 +90,7 @@ const submitOrder = async () => {
     return
   }
 
-  const username = localStorage.getItem('username')
+  const username = user.username
   const token = localStorage.getItem('token')
 
   // ⭐ 未登录：只提示，不跳转
@@ -106,7 +108,7 @@ const submitOrder = async () => {
     }))
   }
 
-  const res = await fetch('http://127.0.0.1:8000/orders', {
+  const res = await fetch('http://127.0.0.1:8000/orders/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
