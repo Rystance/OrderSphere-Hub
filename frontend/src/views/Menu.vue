@@ -12,20 +12,14 @@
           @keyup.enter="applyFilters"
           type="text"
           placeholder="按菜名模糊搜索（回车或点击搜索）"
-          class="flex-1 input px-3 py-1"
+          class="input flex-1"
         />
 
-        <button
-          @click="applyFilters"
-          class="btn-primary px-3 py-1 text-sm"
-        >
+        <button @click="applyFilters" class="btn btn-primary">
           搜索
         </button>
 
-        <button
-          @click="resetFilters"
-          class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-        >
+        <button @click="resetFilters" class="btn btn-secondary">
           重置
         </button>
       </div>
@@ -75,7 +69,9 @@
     </div>
 
     <!-- 菜单展示 -->
-    <div v-if="loading" class="text-center py-10 text-gray-700 dark:text-gray-300">正在加载菜单...</div>
+    <div v-if="loading" class="text-center py-10 text-gray-700 dark:text-gray-300">
+      正在加载菜单...
+    </div>
 
     <div v-else>
       <div v-if="displayedMenu.length === 0" class="text-center text-gray-500 dark:text-gray-400 py-10">
@@ -230,20 +226,41 @@ function addToCart(payload) {
   cart.add(payload)
 }
 
+/**
+ * 优化后的 chip 样式：
+ * - 亮色模式：选中后深色背景 + 白字
+ * - 暗色模式：选中后亮色背景 + 白字 + 明显边框
+ */
 function chipClass(selected, color) {
   const base =
-      'px-2 py-0.5 rounded-full border transition-colors ' +
-      'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600'
+    'px-2 py-1 rounded-full border text-xs transition-colors ' +
+    'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 ' +
+    'border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
 
-  if (selected) {
-    if (color === 'blue')
-      return `${base} bg-blue-600 text-white border-blue-600 hover:bg-blue-700`
-    if (color === 'green')
-      return `${base} bg-green-600 text-white border-green-600 hover:bg-green-700`
-    return `${base} bg-gray-700 text-white border-gray-700`
+  if (!selected) return base
+
+  if (color === 'blue') {
+    return (
+      'px-2 py-1 rounded-full border text-xs ' +
+      'bg-blue-600 dark:bg-blue-500 ' +
+      'text-white border-blue-700 dark:border-blue-400 ' +
+      'hover:bg-blue-700 dark:hover:bg-blue-400'
+    )
   }
 
-  return `${base} hover:bg-gray-100 dark:hover:bg-gray-600`
+  if (color === 'green') {
+    return (
+      'px-2 py-1 rounded-full border text-xs ' +
+      'bg-green-600 dark:bg-green-500 ' +
+      'text-white border-green-700 dark:border-green-400 ' +
+      'hover:bg-green-700 dark:hover:bg-green-400'
+    )
+  }
+
+  return (
+    'px-2 py-1 rounded-full border text-xs ' +
+    'bg-gray-700 dark:bg-gray-600 text-white border-gray-800'
+  )
 }
 </script>
 
@@ -252,11 +269,17 @@ function chipClass(selected, color) {
   @apply w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-2 rounded;
 }
 
-.btn-primary {
-  @apply bg-blue-600 text-white py-2 rounded hover:bg-blue-700;
+.btn {
+  @apply px-3 py-2 text-sm rounded transition-colors;
 }
 
-.flex::-webkit-scrollbar {
-  height: 6px;
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
 }
+
+.btn-secondary {
+  @apply bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600;
+}
+
+.flex::-webkit-scrollbar { height: 6px; }
 </style>
