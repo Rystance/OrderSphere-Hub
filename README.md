@@ -216,13 +216,13 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
 
 推荐使用 [Visual Studio Code](https://code.visualstudio.com/Download) 作为本文档的编辑器，并安装 `.vscode/extensions.json` 中推荐的拓展以获得最佳编辑体验。
 
-## 标题格式 {#heading}
+## 标题格式
 
 - 每个标题均由简短的几个字组成，向用户说明下一节内容的大致格式
 - 除首个大标题外，所有标题均应使用合理数量的`#`来指定合理的标题级别
 - URL slug 应由若干翻译准确、能清晰体现标题内容的英文单词组成，中间用 `-` 隔开。若标题本身由英文组成，请提供一个全小写、由 `-` 替换下划线的 slug
 
-## 用语约定 {#term}
+## 用语约定
 
 | 对象                   | 用语                                                          |
 |----------------------|-------------------------------------------------------------|
@@ -234,7 +234,7 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
 
 如果您发明了一个新名词，请注意在不同地方使用时保持其一致性。
 
-## 符号约定 {#symbol}
+## 符号约定
 
 - 用 `空格` 而不是 `Tab` 进行缩进
 - 用 `\n` 进行换行，文件内通常不应出现 `\r`
@@ -243,16 +243,16 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
 - 在文字段落中均采用 `，` 逗号，每句话结尾需添加 `。` 句号
 - 列表条目、使用特定的代码框 等提示容器中的文本通常不以 `。` 结尾
 
-## 文件结构 {#filesystem}
+## 文件结构
 
 - 将所有图片放置于根目录 `images` 文件夹中，并使用 `![](images/_photos/foo-bar.png)` 的引用形式
 
-## 设计元素 {#design-elements}
+## 设计元素
 
 本文档支持引入图片，采用 `![](./_photos/example.png)` 的形式。
 
 
-## 文本间距 {#spacing}
+## 文本间距
 
 在正常文本和半角标点之间应添加空格，半角标点和全角标点之间无需空格:
 
@@ -267,7 +267,7 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
          ^ 半角、全角标点之间无需空格
 ```
 
-## 文本修饰 {#markup}
+## 文本修饰
 
 **请注意遵守下方粗体或斜体的修饰字符规则**
 
@@ -287,7 +287,7 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
 _* 这是一条温馨提示_
 ```
 
-## 链接格式 {#links}
+## 链接格式
 
 - 在链接到文档内部元素时，请使用 `/` 开头的绝对路径链接，并确保链接中包含了文件扩展名 `.md`  
   例：`![prprrpr](/pa47.md)`
@@ -295,7 +295,7 @@ _* 这是一条温馨提示_
   正确示例：`![这是好的](https://www.bilibili.com/video/BV1va411w7aM/)`  
   错误示例：`![这很不好](https://www.bilibili.com/video/BV1va411w7aM/?share_source=xxx&yyy=zzz)`
 
-## 无序列表 {#unordered-list}
+## 无序列表
 
 使用 `-` 作为列表标记，标记后添加一个空格:
 
@@ -304,7 +304,7 @@ _* 这是一条温馨提示_
 - ItemB
 ```
 
-## 有序列表 {#ordered-list}
+## 有序列表
 
 使用 `1.` 作为列表标记，也可以按个人喜好用 `1.`、`2.`、`3.` 等进行标记，只要保持整个文件一致即可。
 
