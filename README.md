@@ -227,7 +227,7 @@ GET /hybridaction/zybTrackerStatisticsAction ... 404
 | 对象                   | 用语                                                          |
 |----------------------|-------------------------------------------------------------|
 | 文档阅读者                | `您`                                                         |
-| 本平台                  | `SakuraFrp`                                                 |
+| 本平台                  | `OrderSphere-Hub`                                           |
 | 计算机知识丰富的 Geek / 专业用户 | `高级用户`                                                      |
 | 用于演示的用户名称            | `ExampleUser1`、`ExampleUser2`、`SampleUser1`、`SampleUser2` 等 |
 | 用于演示的料理 ID 和名称       | `#233 一个神奇的料理`、`#5 Demo Node`                               |
