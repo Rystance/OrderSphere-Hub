@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
 from app import models, schemas
 from app.deps import get_db, get_current_user
 import bcrypt
+from pathlib import Path
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -53,3 +54,36 @@ def update_current_user(
     else:
         # 如果没有任何变更，返回 400 或可选择返回 200 并提示无变更；这里返回 400
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="没有提供可更新的字段")
+
+
+# 处理上传用户头像的接口：前端 POST /users/me/avatar (form field 'file')
+@router.post("/me/avatar")
+async def upload_current_user_avatar(
+    file: UploadFile = File(...),
+    current_user: models.User = Depends(get_current_user),
+):
+    # 仅允许图片类型
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="只支持图片文件")
+
+    # 计算保存路径：将图片保存在 backend/data/images（而非 backend/app/data/images）
+    # __file__ -> backend/app/routers/users.py
+    # parent -> backend/app/routers
+    # parent.parent -> backend/app
+    # parent.parent.parent -> backend
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+    IMAGE_DIR = BASE_DIR / "data" / "images"
+    IMAGE_DIR.mkdir(parents=True, exist_ok=True)
+
+    filename = f"user_{current_user.id}.png"
+    file_path = IMAGE_DIR / filename
+
+    try:
+        contents = await file.read()
+        with open(file_path, "wb") as f:
+            f.write(contents)
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="保存图片失败")
+
+    # 返回静态文件 URL，前端可直接使用
+    return {"url": f"/images/{filename}"}

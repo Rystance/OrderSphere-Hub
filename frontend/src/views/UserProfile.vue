@@ -250,7 +250,7 @@ function generateColorAvatarDataUrl(name, size = 100) {
 }
 const defaultAvatar = generateColorAvatarDataUrl(user.username || 'U', 100)
 const currentAvatar = computed(() => {
-  if (user.avatar) return user.avatar
+  if (user.avatar) return `http://127.0.0.1:8000${user.avatar}`
   if (previewAvatar.value) return previewAvatar.value
   return defaultAvatar
 })
@@ -348,7 +348,7 @@ async function uploadAvatar() {
     const data = await res.json().catch(() => ({}))
     const url = data.url || null
     if (url) {
-      // 使用后端返回的 URL（通常 /images/user_{id}.png）
+      // 使用后端返回的 URL（ /images/user_{id}.png）
       user.setAvatar(url)
       avatarSuccess.value = '上传成功'
       previewAvatar.value = null

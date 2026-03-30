@@ -69,7 +69,7 @@ function generateColorAvatarDataUrl(name, size = 100) {
 }
 
 const avatarUrl = computed(() => {
-  if (user.avatar) return user.avatar
+  if (user.avatar) return `http://127.0.0.1:8000${user.avatar}`
   return generateColorAvatarDataUrl(user.username || 'U', 100)
 })
 
