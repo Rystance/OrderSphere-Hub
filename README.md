@@ -72,7 +72,6 @@ cd OrderSphere-Hub
 cd backend
 python -m venv venv
 venv\Scripts\activate   # Windows
-# 或 source venv/bin/activate（Linux/macOS）
 
 pip install -r requirements.txt
 ```
