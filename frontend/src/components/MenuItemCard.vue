@@ -13,8 +13,6 @@
 
     <!-- 原卡片内容（flex 容器） -->
     <div class="flex items-center bg-white dark:bg-gray-800 rounded shadow p-3 space-x-4">
-
-      <!-- 左侧小图片 -->
       <img
         :src="`http://127.0.0.1:8000${item.image_url}`"
         alt=""
@@ -22,10 +20,7 @@
         @mouseenter="showTooltip = true"
         @mouseleave="showTooltip = false"
       />
-
-      <!-- 右侧信息 -->
       <div class="flex-1 flex flex-col justify-between">
-
         <div>
           <h3
             class="text-lg font-semibold cursor-pointer"
@@ -36,52 +31,82 @@
           </h3>
           <p class="text-gray-600">￥{{ item.price }}</p>
         </div>
-
         <div class="flex items-center space-x-3 mt-2">
           <button @click="decrease" class="px-2 bg-gray-300 dark:bg-gray-600 rounded">-</button>
           <span class="font-semibold">{{ quantity }}</span>
           <button @click="increase" class="px-2 bg-gray-300 dark:bg-gray-600 rounded">+</button>
         </div>
-
         <button
           @click="add"
           class="mt-2 bg-green-600 text-white py-1 rounded text-sm"
         >
           加入购物车
         </button>
-
       </div>
-
     </div>
 
+    <!-- 弹窗组件 -->
+    <BaseDialog ref="dialogRef" />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import BaseDialog from './BaseDialog.vue'   // 确保路径正确
 
 const props = defineProps({
   item: Object
 })
-
 const emits = defineEmits(['add'])
 
 const quantity = ref(1)
 const showTooltip = ref(false)
+const dialogRef = ref(null)
+
+// 辅助函数：等待 dialogRef 绑定完成
+const waitForDialog = (timeout = 5000) => {
+  return new Promise((resolve, reject) => {
+    const startTime = Date.now()
+    const check = () => {
+      if (dialogRef.value) {
+        resolve(dialogRef.value)
+      } else if (Date.now() - startTime > timeout) {
+        reject(new Error('弹窗组件未就绪，请检查组件是否正常加载'))
+      } else {
+        setTimeout(check, 50)
+      }
+    }
+    check()
+  })
+}
 
 const increase = () => quantity.value++
 const decrease = () => {
   if (quantity.value > 1) quantity.value--
 }
 
-const add = () => {
+const showConfirmDialog = async () => {
+  try {
+    // 等待弹窗组件实例可用
+    const dialog = await waitForDialog()
+    const result = await dialog.open({
+      message: '你确定要执行此操作吗？',
+      title: '确认',
+      showButtons: true,
+      maxDuration: 10000,
+    })
+    console.log('用户点击了：', result)
+  } catch (error) {
+    console.error('弹窗超时或取消', error)
+  }
+}
+
+const add = async () => {
   emits('add', {
     ...props.item,
     quantity: quantity.value
   })
-
-  alert(`已加入购物车：${props.item.name} × ${quantity.value}`)
-
+  await showConfirmDialog()
   quantity.value = 1
 }
 </script>
@@ -97,7 +122,6 @@ const add = () => {
     transform: translate(-50%, -100%);
   }
 }
-
 .animate-fade {
   animation: fade 0.15s ease-out;
 }
