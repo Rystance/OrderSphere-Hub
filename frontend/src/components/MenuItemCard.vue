@@ -1,7 +1,5 @@
 <template>
   <div class="relative">
-
-    <!-- Tooltip（完全脱离 flex，不影响布局） -->
     <div
       v-if="showTooltip"
       class="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-3 -translate-y-full
@@ -11,8 +9,9 @@
       {{ item.description }}
     </div>
 
-    <!-- 原卡片内容（flex 容器） -->
     <div class="flex items-center bg-white dark:bg-gray-800 rounded shadow p-3 space-x-4">
+
+      <!-- 左侧小图片 -->
       <img
         :src="`http://127.0.0.1:8000${item.image_url}`"
         alt=""
@@ -20,6 +19,8 @@
         @mouseenter="showTooltip = true"
         @mouseleave="showTooltip = false"
       />
+
+      <!-- 右侧信息 -->
       <div class="flex-1 flex flex-col justify-between">
         <div>
           <h3
@@ -52,65 +53,54 @@
 
 <script setup>
 import { ref } from 'vue'
-import BaseDialog from './BaseDialog.vue'   // 确保路径正确
+import BaseDialog from './BaseDialog.vue'
 
-const props = defineProps({
-  item: Object
-})
+const props = defineProps({ item: Object })
 const emits = defineEmits(['add'])
 
 const quantity = ref(1)
 const showTooltip = ref(false)
 const dialogRef = ref(null)
 
-// 辅助函数：等待 dialogRef 绑定完成
-const waitForDialog = (timeout = 5000) => {
+const increase = () => quantity.value++
+const decrease = () => { if (quantity.value > 1) quantity.value-- }
+
+const waitForDialog = (timeout = 2000) => {
   return new Promise((resolve, reject) => {
-    const startTime = Date.now()
-    const check = () => {
-      if (dialogRef.value) {
+    const start = Date.now()
+    const check = async () => {
+      if (dialogRef.value && typeof dialogRef.value.open === 'function') {
         resolve(dialogRef.value)
-      } else if (Date.now() - startTime > timeout) {
-        reject(new Error('弹窗组件未就绪，请检查组件是否正常加载'))
+      } else if (Date.now() - start > timeout) {
+        reject(new Error('弹窗组件未就绪'))
       } else {
-        setTimeout(check, 50)
+        await new Promise(r => setTimeout(r, 50))
+        check()
       }
     }
     check()
   })
 }
 
-const increase = () => quantity.value++
-const decrease = () => {
-  if (quantity.value > 1) quantity.value--
-}
-
 const showSimpleDialog = async () => {
   try {
-    // 等待弹窗组件实例可用
     const dialog = await waitForDialog()
     const result = await dialog.open({
-      // message: '已加入购物车：' + props.item.name + '×' + quantity.value,
       title: '购物车',
-      message: '已加入购物车：' + props.item.name + '×' + quantity.value,
-      messageerror: 'center',
+      message: '已加入购物车：' + props.item.name + ' × ' + quantity.value,
+      messageAlign: 'center',
       duration: 1000,
       overlay: false,
       position: 'top'
     })
-      // 原提示信息
-      // alert(`已加入购物车：${props.item.name} × ${quantity.value}`)
-    console.log('用户点击了：', result)
+    console.log('dialog result:', result)
   } catch (error) {
-    console.error('弹窗超时或取消', error)
+    console.error('弹窗失败或超时', error)
   }
 }
 
 const add = async () => {
-  emits('add', {
-    ...props.item,
-    quantity: quantity.value
-  })
+  emits('add', { ...props.item, quantity: quantity.value })
   await showSimpleDialog()
   quantity.value = 1
 }
@@ -118,16 +108,8 @@ const add = async () => {
 
 <style scoped>
 @keyframes fade {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -120%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -100%);
-  }
+  from { opacity: 0; transform: translate(-50%, -120%); }
+  to { opacity: 1; transform: translate(-50%, -100%); }
 }
-.animate-fade {
-  animation: fade 0.15s ease-out;
-}
+.animate-fade { animation: fade 0.15s ease-out; }
 </style>
