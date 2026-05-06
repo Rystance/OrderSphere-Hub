@@ -7,7 +7,7 @@
 
 [3: 绘图（时序图/类图）（两种图每人各画一张，从下方选择，完成后上传至/images，命名格式参考/images内的README）](#绘图时序图类图)
 - [时序图（10个）](#时序图sequence-diagrams)
-- [类图（10个）](#类图class-diagram-ideas)
+- [类图（9个）](#类图class-diagram-ideas)
 
 ## 新页面开发实施指南
 
@@ -247,6 +247,6 @@
 补充方向（可选，若需更多） 9. 评价与反馈（Review）
 - 类：Review, ReviewImage, ModeratorNote
 - 关系：Review 关联 User 与 MenuItem；ModeratorNote 关联 Review。
-10. 预约/座位（Reservations）
+9. 预约/座位（Reservations）
 - 类：Reservation, Table, Timeslot, ReservationPolicy
 - 关系：Table 1─* Reservation；Reservation 绑定 Timeslot 与 User。
