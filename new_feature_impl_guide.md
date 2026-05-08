@@ -193,7 +193,7 @@
 2. 后厨接单并完成（Kitchen 执行流程）
 - 参与者：Kitchen UI（Web/Tablet）→ Kitchen WS Server → 后端 Orders Router → OrderService → DB → Notification Service → 用户前端
 - 关键步骤：接收新单（WS）→ 标记“制作中”→ 标记“完成”→ 更新订单状态并通知用户/打印出票据。
-3. 图片（菜品/头像）上传与静态托管
+3. [已选]图片（菜品/头像）上传与静态托管
 - 参与者：User/Admin UI → 前端上传组件 → 后端 Upload API → 文件存储（backend/data/...）→ 返回静态 URL → 前端请求静态 URL（/images 或 /user_images）
 - 关键步骤：文件接收 → 保存到后端目录 → 生成并返回访问路径 → 浏览器请求并由 StaticFiles 返回。
 4. 导入菜单（CSV/JSON）流程
